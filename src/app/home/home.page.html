@@ -6,7 +6,7 @@
   </ion-header>
   <ion-content class="ion-padding">This is the menu content.</ion-content>
 </ion-menu>
-<div class="ion-page" id="main-content">
+<div class="ion-page" id="main-content" >
   <ion-header>
     <ion-toolbar>
       <ion-buttons slot="start">
@@ -14,7 +14,7 @@
       </ion-buttons>
       <ion-buttons slot="end">
         <div class="amount">
-          R$ 0.00
+          R$ {{ amount }}
         </div>
       </ion-buttons>
     </ion-toolbar>
@@ -56,50 +56,83 @@
     </div>
 
   </ion-content>
-  </div>
-
-
-  <ion-modal [isOpen]="isModalOpen">
+  <ion-modal [isOpen]="isModalOpen" >
     <ng-template>
+    
       <ion-header>
         <ion-toolbar>
-          <ion-title>Automação</ion-title>
+          <ion-buttons slot="start">
+            <ion-icon (click)="setOpen(false)" name="arrow-back-outline"></ion-icon>
+          </ion-buttons>
           <ion-buttons slot="end">
-            <ion-button (click)="setOpen(false)">Close</ion-button>
+            <div class="amount">
+              R$ {{ amount }}            
+            </div>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
-      <ion-content class="ion-padding">
+      
+      
+      <ion-content class="ion-padding" #content>
         <div class="center">
-       
+          <div class="card" *ngIf="showCard" >
+           
+            <img src="../../assets/Moneyverse.png" alt="">
+              <p class="text-card">
+                Parabens seu saldo Aumentou!,
+                Digite abaixo sua chave pix que iremos realizar o seu saque
+            </p>
+            <input type="text" name="" id="" class="input-pix">
+            <div class="actions">
+                <button class="button-continue" (click)="continueProcess()">
+                  Continuar
+                </button>
+                
+                <button class="button-pix">
+                  Sacar
+                </button>
+            </div>
+
+          </div>
+          
           <div class="chat">
-     
-            <div class="messages" id="chat" >
-              <div class="messages" id="chat">
+            
+            <div class="messages" id="chat">
                 <div *ngFor="let message of insertMessage" class="message">
-                    <!-- Mostre o logo somente se a propriedade showLogo estiver definida e for verdadeira -->
-                    <img *ngIf="message.showLogo" class="logo" src="https://s2.glbimg.com/jsaPuF7nO23vRxQkuJ_V3WgouKA=/e.glbimg.com/og/ed/f/original/2014/06/10/461777879.jpg" alt="">
-                    <div class="stark" *ngIf="message.imagem_path">
+        
+                    <!-- Adicione a animação de digitação se a propriedade isTyping estiver definida e for verdadeira -->
+                    <div *ngIf="message.isTyping" >
+                        <div class="typing typing-1"></div>
+                        <div class="typing typing-2"></div>
+                        <div class="typing typing-3"></div>
+                    </div>
+    
+                    <img *ngIf="message.showLogo " class="logo " ngClass="message.imagem_path ? logo-action : logo-no" src="../../assets/5f20b824-4ec7-4fc8-90ab-374555cc76db.jpeg" alt="">
+        
+                    <div class="stark" >
                         <img src="{{ message.imagem_path }}" alt="">
                     </div>
-                    <div class="text" *ngIf="message.texto">
+                    
+                    <div class="text" *ngIf="message.texto && !message.isTyping">
                         {{ message.texto }}
                     </div>
+
+
                 </div>
             </div>
-            
-            
-            
-            
-            <div class="message stark">
-                <div class="typing typing-1"></div>
-                <div class="typing typing-2"></div>
-                <div class="typing typing-3"></div>
-              </div>
-            </div>
-            
-          </div>
+        </div>
+        
+       
+        
         </div>
       </ion-content>
     </ng-template>
   </ion-modal>
+
+
+
+ 
+
+</div>
+
+

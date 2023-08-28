@@ -252,11 +252,80 @@ body, html {
 	}
 }
 
-// Obviously in a real app I would load this from a DB with JS
-// For now this is a nice quick and easy method to mockup
 
-.pic.stark { background-image: url('https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/7/73/SMH_Mentor_6.png')}
-.pic.banner { background-image: url('https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/4/4f/BruceHulk-Endgame-TravelingCapInPast.jpg')}
-.pic.thor { background-image: url('https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/9/98/ThorFliesThroughTheAnus.jpg')}
-.pic.danvers { background-image: url('https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/0/05/HeyPeterParker.png')}
-.pic.rogers { background-image: url('https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/7/7c/Cap.America_%28We_Don%27t_Trade_Lives_Vision%29.png')}
+
+
+@keyframes slideDown {
+	0% {
+		transform: translateY(-20%);
+	}
+
+	100% {
+		transform: translateY(0px);
+	}
+}
+
+
+.card {
+	position: fixed ;
+	margin: 25% 5%  0% 5%;
+	background-color: white;
+	z-index: 1000000000000000000000000000000000000000;
+	border-radius: 12px;
+	padding: 12px;
+	// animation: slideUp 0.5s forwards; 
+	box-shadow: 1px -1px 16px 6px rgba(168,160,160,0.75);
+	-webkit-box-shadow: 1px -1px 16px 6px rgba(168,160,160,0.75);
+	-moz-box-shadow: 1px -1px 16px 6px rgba(168,160,160,0.75);
+}
+
+
+@keyframes slideUp {
+    from {
+        top: translate(10%,100%); /* start from below the screen */
+    }
+    to {
+        transform: translate(30%, 10%); /* end at its intended position */
+    }
+}
+
+.input-pix {
+	width: 100%;
+	background-color: #DEE5EE;
+	border: none;
+	padding: 6px;
+}
+
+.text-card {
+	width: 100%;
+	text-align: center;
+	font-size: 12px;
+}
+
+.actions {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	margin: 10px;
+
+
+}
+
+
+.button-continue{
+	background-color: #2d9eee;
+	padding: 12px;
+	margin-left: 10px;
+	width: 100%;
+	color: white;
+	border-radius: 12px;
+}
+
+.button-pix {
+	background-color: #44c194;
+	padding: 12px;
+	margin-left: 10px;
+	width: 100%;
+	color: white;
+	border-radius: 12px;
+}
