@@ -18,30 +18,30 @@ export class HomePage {
     {
       "imagem_path": "../assets/capts/226md.png",
       "resposta": "226md",
-      "valor": 1560.00
+      "valor": 6.35
     },
     {
       "imagem_path": "../assets/capts/2356g.png",
       "resposta": "2356g",
-      "valor": 250.50
+      "valor": 8.20
     },
     {
-      "imagem_path": "../assets/capts/2356g.png",
-      "resposta": "2356g",
-      "valor": 15.50
+      "imagem_path": "../assets/capts/2b827.png",
+      "resposta": "2b827",
+      "valor": 12.04
     },
     {
-      "imagem_path": "../assets/capts/2356g.png",
-      "resposta": "2356g",
-      "valor": 15.50
+      "imagem_path": "../assets/capts/2cg58.png",
+      "resposta": "2cg58",
+      "valor": 4.50
+    }, {
+      "imagem_path": "../assets/capts/2cgyx.png",
+      "resposta": "2cgyx",
+      "valor": 9.50
     }, {
       "imagem_path": "../assets/capts/2356g.png",
       "resposta": "2356g",
-      "valor": 15.50
-    }, {
-      "imagem_path": "../assets/capts/2356g.png",
-      "resposta": "2356g",
-      "valor": 15.50
+      "valor": 12.50
     }, {
       "imagem_path": "../assets/capts/2356g.png",
       "resposta": "2356g",
@@ -89,6 +89,7 @@ export class HomePage {
   showCard: boolean = false;
   currentCaptchaIndex: number = 0; 
   processQuant:number = 0
+  saque = false
   setOpen(isOpen: boolean) {
     this.isModalOpen = isOpen;
     this.insertMessage = []
@@ -186,6 +187,10 @@ continueProcess() {
     this.captchaCount = 0
     this.showCard = false
     this.initProcess();
+}
+
+saqueActive(){
+  this.saque = true
 }
 
 

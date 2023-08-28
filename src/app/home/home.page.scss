@@ -3,6 +3,12 @@ ion-content {
   position: relative;
 }
 
+ion-modal {
+	z-index: 100 !important;
+}
+
+
+
 #container {
   display: flex;
   flex-direction: column;
@@ -289,6 +295,8 @@ body, html {
     }
 }
 
+
+
 .input-pix {
 	width: 100%;
 	background-color: #DEE5EE;
@@ -328,4 +336,65 @@ body, html {
 	width: 100%;
 	color: white;
 	border-radius: 12px;
+}
+
+
+.notify-struct {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	z-index: 9999;
+  }
+  
+  .notify {
+	/* From https://css.glass */
+	background: rgba(255, 255, 255, 0.46);
+	border-radius: 8px;
+	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+	backdrop-filter: blur(18px);
+	-webkit-backdrop-filter: blur(18px);
+	z-index: 1000;
+	position: fixed;
+	top: 5%;
+	width: 320px;
+	height: 30px;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start; /* Ajustado para alinhar à esquerda */
+	align-items: center;
+	padding: 25px;
+	animation: notifSLide 1s ;
+
+  }
+  
+  .notify img {
+	height: 30px;
+	border-radius: 4px;
+  }
+  
+  .notify .content {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start; /* Ajustado para alinhar à esquerda */
+	margin-left: 10px; /* Adicionado espaço entre a imagem e os textos */
+	p {
+	  font-size: 12px;
+	  margin: 0; /* Removido espaçamento padrão do parágrafo */
+	}
+  }
+  
+
+  @keyframes notifSLide {
+	from {
+        top: -10%; /* start from below the screen */
+    }
+    to {
+       top: 5%;
+    }
+}
+
+
+
+element.style {
+    z-index: 100 ;
 }
