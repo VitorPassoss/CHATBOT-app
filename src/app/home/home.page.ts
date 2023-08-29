@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
+import { Router } from '@angular/router';
 import { IonContent } from '@ionic/angular';
 
 @Component({
@@ -11,7 +12,10 @@ export class HomePage {
   
   @ViewChild('content', { static: false }) content!: IonContent;
 
-  constructor(private cdRef: ChangeDetectorRef) {}
+  constructor(
+    private cdRef: ChangeDetectorRef,
+    private router: Router
+    ) {}
 
 
   capchas: any[] = [
@@ -191,6 +195,10 @@ continueProcess() {
 
 saqueActive(){
   this.saque = true
+}
+
+goExit(){
+  this.router.navigate(['login'])
 }
 
 
