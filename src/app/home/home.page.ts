@@ -1,22 +1,29 @@
-import { Component, ViewChild } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonContent } from '@ionic/angular';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements OnInit{
   
   @ViewChild('content', { static: false }) content!: IonContent;
 
   constructor(
     private cdRef: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private httpClient: HttpClient,
+
     ) {}
 
+    ngOnInit(): void {
+      this.getUser()
+    }
 
   capchas: any[] = [
     {
@@ -46,38 +53,6 @@ export class HomePage {
       "imagem_path": "../assets/capts/2356g.png",
       "resposta": "2356g",
       "valor": 12.50
-    }, {
-      "imagem_path": "../assets/capts/2356g.png",
-      "resposta": "2356g",
-      "valor": 15.50
-    }, {
-      "imagem_path": "../assets/capts/2356g.png",
-      "resposta": "2356g",
-      "valor": 15.50
-    }, {
-      "imagem_path": "../assets/capts/2356g.png",
-      "resposta": "2356g",
-      "valor": 15.50
-    }, {
-      "imagem_path": "../assets/capts/2356g.png",
-      "resposta": "2356g",
-      "valor": 15.50
-    }, {
-      "imagem_path": "../assets/capts/2356g.png",
-      "resposta": "2356g",
-      "valor": 15.50
-    }, {
-      "imagem_path": "../assets/capts/2356g.png",
-      "resposta": "2356g",
-      "valor": 15.50
-    }, {
-      "imagem_path": "../assets/capts/2356g.png",
-      "resposta": "2356g",
-      "valor": 15.50
-    }, {
-      "imagem_path": "../assets/capts/2356g.png",
-      "resposta": "2356g",
-      "valor": 15.50
     }
   ];
 
@@ -133,7 +108,12 @@ initProcess() {
   this.insertQueue.push(this.typingAnimation);
   this.insertQueue.push({imagem_path:captcha.imagem_path, showLogo: true})
   this.insertQueue.push({ texto: `Software: ${captcha.resposta}`, showLogo: true });
-  this.insertQueue.push({ texto: `Parabéns! Seu saldo agora é R$${captcha.valor}`, showLogo: true , valor:captcha.valor});
+  
+  
+  this.insertQueue.push({ texto: `Parabéns! Seu saldo agora é ${this.amount.toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  })}`, showLogo: true , valor:captcha.valor});
   this.captchaCount++;
 
   setTimeout(() => {
@@ -141,7 +121,7 @@ initProcess() {
   }, 500);
 }
 
-  processQueue() {
+processQueue() {
     this.processQuant++
     if (this.insertQueue.length > 0) {
         
@@ -164,7 +144,17 @@ initProcess() {
             this.insertMessage.push(nextMessage);
             
             if(nextMessage.valor){
-                this.amount = this.amount + nextMessage.valor;
+                const currentAmountCents = Math.round(this.amount * 100);
+                const nextAmountCents = Math.round(nextMessage.valor * 100);
+                
+                // Realizando a soma dos centavos
+                const totalCents = currentAmountCents + nextAmountCents;
+                
+                // Convertendo o resultado de volta para reais (dividindo por 100)
+                const formattedResult = (totalCents / 100).toFixed(2); // 2 casas decimais
+                
+                // Atualizando o valor 'this.amount' com o resultado
+                this.amount = Number(formattedResult);
             }
             
             setTimeout(() => {
@@ -182,6 +172,7 @@ initProcess() {
     } else {
         this.showCard = true;
         this.processedMessagesCount = 0;
+        this.handleCash(false)
     }
 }
 
@@ -195,12 +186,86 @@ continueProcess() {
 
 saqueActive(){
   this.saque = true
+  setTimeout(()=>{
+    this.amount = 0.00
+    this.saque = false
+  },2000)
+  this.handleCash(true)
+
 }
 
 goExit(){
-  this.router.navigate(['login'])
+    localStorage.removeItem('access_token');
+    this.router.navigate(['login']);
 }
 
+
+handleCash(debit:boolean){
+
+const accessToken = localStorage.getItem('access_token');
+
+if (accessToken) {
+  // Passo 2: Configurar o cabeçalho com o token Bearer
+  const headers = {
+    Authorization: `Bearer ${accessToken}`
+  };
+
+  // Passo 3: Fazer a primeira requisição GET
+  this.httpClient.get(environment.BASE_URL + '/v1/auth/user', { headers })
+    .toPromise()
+    .then((response:any) => {
+      console.log(response)
+      const userId = response.user.pk; // Supondo que a resposta tenha uma propriedade 'id'
+
+      // Passo 4: Montar o objeto para a requisição POST
+      const cashData = {
+        user: userId,
+        amount: this.amount,
+        debit: debit
+      };
+
+      // Passo 5: Fazer a requisição POST para /cash
+      this.httpClient.post(environment.BASE_URL + '/v1/auth/cash/', cashData, { headers })
+        .toPromise()
+        .then(postResponse => {
+          console.log(postResponse)
+        })
+        .catch(postError => {
+          console.error('Erro na requisição POST', postError);
+        });
+    })
+    .catch(getError => {
+      console.error('Erro na requisição GET', getError);
+    });
+} else {
+  console.error('Token de acesso não encontrado no localStorage');
+}
+
+}
+
+
+getUser(){
+  const accessToken = localStorage.getItem('access_token');
+
+  if (accessToken) {
+    // Passo 2: Configurar o cabeçalho com o token Bearer
+    const headers = {
+      Authorization: `Bearer ${accessToken}`
+    };
+  
+    this.httpClient.get(environment.BASE_URL + '/v1/auth/user', { headers })
+      .toPromise()
+      .then((response:any) => {
+        console.log(response)
+        this.amount = response.saldo
+      })
+      .catch(getError => {
+        console.error('Erro na requisição GET', getError);
+      });
+  } else {
+    console.error('Token de acesso não encontrado no localStorage');
+  }
+}
 
   
 }
