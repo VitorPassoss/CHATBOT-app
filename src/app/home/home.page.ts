@@ -22,7 +22,6 @@ export class HomePage implements OnInit{
     ) {}
 
     ngOnInit(): void {
-      this.getUser()
     }
 
   capchas: any[] = [
@@ -110,7 +109,7 @@ initProcess() {
   this.insertQueue.push({ texto: `Software: ${captcha.resposta}`, showLogo: true });
   
   
-  this.insertQueue.push({ texto: `Parabéns! Seu saldo agora é ${this.amount.toLocaleString('pt-BR', {
+  this.insertQueue.push({ texto: `Parabéns! você recebeu ${captcha.valor.toLocaleString('pt-BR', {
     style: 'currency',
     currency: 'BRL',
   })}`, showLogo: true , valor:captcha.valor});
@@ -172,7 +171,6 @@ processQueue() {
     } else {
         this.showCard = true;
         this.processedMessagesCount = 0;
-        this.handleCash(false)
     }
 }
 
@@ -184,88 +182,6 @@ continueProcess() {
     this.initProcess();
 }
 
-saqueActive(){
-  this.saque = true
-  setTimeout(()=>{
-    this.amount = 0.00
-    this.saque = false
-  },2000)
-  this.handleCash(true)
-
-}
-
-goExit(){
-    localStorage.removeItem('access_token');
-    this.router.navigate(['login']);
-}
-
-
-handleCash(debit:boolean){
-
-const accessToken = localStorage.getItem('access_token');
-
-if (accessToken) {
-  // Passo 2: Configurar o cabeçalho com o token Bearer
-  const headers = {
-    Authorization: `Bearer ${accessToken}`
-  };
-
-  // Passo 3: Fazer a primeira requisição GET
-  this.httpClient.get(environment.BASE_URL + '/v1/auth/user', { headers })
-    .toPromise()
-    .then((response:any) => {
-      console.log(response)
-      const userId = response.user.pk; // Supondo que a resposta tenha uma propriedade 'id'
-
-      // Passo 4: Montar o objeto para a requisição POST
-      const cashData = {
-        user: userId,
-        amount: this.amount,
-        debit: debit
-      };
-
-      // Passo 5: Fazer a requisição POST para /cash
-      this.httpClient.post(environment.BASE_URL + '/v1/auth/cash/', cashData, { headers })
-        .toPromise()
-        .then(postResponse => {
-          console.log(postResponse)
-        })
-        .catch(postError => {
-          console.error('Erro na requisição POST', postError);
-        });
-    })
-    .catch(getError => {
-      console.error('Erro na requisição GET', getError);
-    });
-} else {
-  console.error('Token de acesso não encontrado no localStorage');
-}
-
-}
-
-
-getUser(){
-  const accessToken = localStorage.getItem('access_token');
-
-  if (accessToken) {
-    // Passo 2: Configurar o cabeçalho com o token Bearer
-    const headers = {
-      Authorization: `Bearer ${accessToken}`
-    };
-  
-    this.httpClient.get(environment.BASE_URL + '/v1/auth/user', { headers })
-      .toPromise()
-      .then((response:any) => {
-        console.log(response)
-        this.amount = response.saldo
-      })
-      .catch(getError => {
-        console.error('Erro na requisição GET', getError);
-      });
-  } else {
-    console.error('Token de acesso não encontrado no localStorage');
-  }
-}
 
   
 }

@@ -9,30 +9,7 @@
 </div>
 
 
-<ion-menu contentId="main-content">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title></ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content class="ion-padding">
-    <ion-list>
-      <ion-item>
-        <ion-icon name="cog-outline"></ion-icon>
-        <ion-label style="margin-left: 6px;">Automação</ion-label>
-      </ion-item>
-      <ion-item>
-        <ion-icon name="cash-outline"></ion-icon> 
-        <ion-label style="margin-left: 6px;">Saque</ion-label>
-      </ion-item>
-      <ion-item (click)="goExit()" >
-        <ion-icon name="exit-outline"></ion-icon>
-        <ion-label style="margin-left: 6px;">Sair</ion-label>
-      </ion-item>
 
-    </ion-list>
-  </ion-content>
-</ion-menu>
 
 <div class="ion-page" id="main-content" >
   <ion-header>
@@ -91,18 +68,13 @@
             <img src="../../assets/Moneyverse.png" alt="">
               <p class="text-card">
                 Parabens seu saldo Aumentou!,
-                Digite abaixo sua chave pix que iremos realizar o seu saque
+                Clique no link abaixo e veja o tutorial de como fazer o saque
             </p>
 
-            <input type="text" name="" id="" class="input-pix">
 
             <div class="actions">
                 <button class="button-continue" (click)="continueProcess()">
-                  Continuar
-                </button>
-                
-                <button class="button-pix" (click)="saqueActive()">
-                  Sacar
+                  Ver tutorial
                 </button>
             </div>
 
